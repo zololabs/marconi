@@ -2,8 +2,6 @@
 
 (def TEST-USERS (ref {}))
 
-(defn create [app-installed? permissions])
-
 (defn all [])
 
 (defn delete [user])
