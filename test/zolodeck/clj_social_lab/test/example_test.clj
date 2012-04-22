@@ -1,7 +1,7 @@
-(ns zolodeck.clj-facebook-lab.test.example-test
+(ns zolodeck.clj-social-lab.test.example-test
   (:use [clojure.test :only [run-tests deftest is are testing]]
-        zolodeck.clj-facebook-lab.facebook)
-  (:require [zolodeck.clj-facebook-lab.facebook.test-user :as test-user]))
+        zolodeck.clj-social-lab.facebook)
+  (:require [zolodeck.clj-social-lab.facebook.test-user :as test-user]))
 
   ;; init-facebook-lab
   ;; user1 = test-user/create
@@ -23,7 +23,7 @@
   ;; delete-all
 
 (deftest test-facebook-friends-integration
-  (init-facebook-lab "287471481334573" "48741a4a0358763b0649459772f53cc4")
+  (init-facebook-lab )
   )
 
 (deftest test-facebook-wall-posts-integration)

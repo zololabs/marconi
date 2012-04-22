@@ -1,7 +1,7 @@
-(ns zolodeck.clj-facebook-lab.facebook
+(ns zolodeck.clj-social-lab.facebook
   (:use 
-   zolodeck.clj-facebook-lab.utils.debug
-   zolodeck.clj-facebook-lab.utils.core)
+   zolodeck.clj-social-lab.utils.debug
+   zolodeck.clj-social-lab.utils.core)
   (:require 
    [clj-http.client :as http]
    [uri.core :as uri]))

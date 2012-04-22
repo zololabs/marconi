@@ -1,5 +1,5 @@
-(ns zolodeck.clj-facebook-lab.facebook.test-user
-  (:require [zolodeck.clj-facebook-lab.facebook.test-user-store :as store]
+(ns zolodeck.clj-social-lab.facebook.test-user
+  (:require [zolodeck.clj-social-lab.facebook.test-user-store :as store]
             [clj-http.client :as http]))
 
 (defn create [app-installed? permissions]

@@ -1,4 +1,4 @@
-(ns zolodeck.clj-facebook-lab.utils.debug
+(ns zolodeck.clj-social-lab.utils.debug
   (:use clojure.pprint))
 
 (defn print-vals [& args]

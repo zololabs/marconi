@@ -1,4 +1,4 @@
-(ns zolodeck.clj-facebook-lab.facebook.test-user-store)
+(ns zolodeck.clj-social-lab.facebook.test-user-store)
 
 (def TEST-USERS (ref {}))
 
