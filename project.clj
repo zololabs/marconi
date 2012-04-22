@@ -19,7 +19,8 @@
   :hooks [leiningen.hooks.difftest]
 
   :dev-dependencies [[clj-stacktrace "0.2.4"]
-                     [swank-clojure "1.3.3"]]
+                     [swank-clojure "1.3.3"]
+                     [clojure-csv/clojure-csv "2.0.0-alpha1"]]
   
   :min-lein-version "1.7.0"
 
