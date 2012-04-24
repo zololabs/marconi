@@ -29,26 +29,21 @@
      (print-vals "Creating User : " full-name)
      (->> (fb-request/create-user-request app-access-token permissions app-installed? full-name)
           (http/post (fb-url/create-test-user-url app-id))
-          mapify-response-body)))
+          mapify-response-body
+          (merge {:name full-name})
+          context/add-user!)))
 
 (defn delete [user]
-  (print-vals "Deleting User : " (:id user))
+  (print-vals "Deleting User : " (:name user))
   (http/post (fb-url/delete-test-user-url (:id user)) 
-             (fb-request/empty-user-request (:access-token user))))
-
-(defn delete-all 
-  ([]
-     (delete-all context/APP-ID context/APP-ACCESS-TOKEN))
-  ([app-id app-access-token]
-     (print-vals "Deleting All Users")
-     (doseq [u (all app-id app-access-token)]
-       (delete u))))
+             (fb-request/empty-user-request (:access-token user)))
+  (context/remove-user! user))
 
 (defn make-friend 
   ([friend]
      (make-friend (context/current-user) friend))
   ([user friend]
-     (print-vals "Making " (:id user) " friend of " (:id friend))
+     (print-vals "Making " (:name user) " friend of " (:name friend))
      (http/post 
       (fb-url/friend-request-url (:id user) (:id friend)) 
       (fb-request/empty-user-request (:access-token user)))

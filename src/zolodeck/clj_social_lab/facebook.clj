@@ -19,17 +19,16 @@
        :access_token))
 
 (defn login-as [user]
-  (print-vals "Logging in as " (:id user))
+  (print-vals "Logging in as " (:name user))
   (reset! context/CURRENT-USER user))
 
 (defmacro in-facebook-lab [app-id app-secret & body]
   `(binding [context/APP-ID ~app-id
              context/APP-ACCESS-TOKEN (app-access-token ~app-id ~app-secret)]
-     (user/delete-all)
      (try 
       ~@body
       (finally 
-       (user/delete-all)))))
+       (map user/delete (context/all-users))))))
 
 
 
