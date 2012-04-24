@@ -1,6 +1,7 @@
 (ns zolodeck.clj-social-lab.facebook.user-test
   (:use [clojure.test :only [run-tests deftest is are testing]]
-        zolodeck.clj-social-lab.facebook)
+        zolodeck.clj-social-lab.facebook
+        zolodeck.clj-social-lab.utils.core)
   (:require [zolodeck.clj-social-lab.facebook.user :as user]))
 
   ;; init-facebook-lab
@@ -22,7 +23,23 @@
   ;; messages should have user2 message
   ;; delete-all
 
-(deftest test-facebook-friends-integration)
+
+;; (deftest test-delete-all
+;;   (init-facebook-lab)
+;;   (user/delete-all)
+;;   (user/create "Jack")
+;;   (user/create "Jill"))
+
+(def app-id (system-env "APP_ID"))
+(def app-secret (system-env "APP_SECRET"))
+
+(deftest ^:integration test-facebook-friends-integration
+  (in-facebook-lab 
+   app-id app-secret
+   (let [jack (user/create "Jack")
+         jill (user/create "Jill")]
+     (login-as jack)
+     (user/make-friend jill))))
 
 (deftest test-facebook-wall-posts-integration)
 

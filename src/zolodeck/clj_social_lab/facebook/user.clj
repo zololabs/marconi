@@ -3,6 +3,7 @@
         zolodeck.clj-social-lab.utils.core)
   (:require [zolodeck.clj-social-lab.facebook.request :as fb-request]
             [zolodeck.clj-social-lab.facebook.url :as fb-url]
+            [zolodeck.clj-social-lab.facebook.context :as context]
             [clj-http.client :as http]
             [uri.core :as uri]
             [clojure.data.json :as json]))
@@ -21,26 +22,40 @@
        :data
        (map keywordize-map)))
 
-(defn create [app-id app-access-token full-name app-installed? permissions]
-  (->> (fb-request/create-user-request app-access-token permissions app-installed? full-name)
-       (http/post (fb-url/create-test-user-url app-id))
-       mapify-response-body))
+(defn create 
+  ([full-name]
+     (create context/APP-ID context/APP-ACCESS-TOKEN full-name true context/DEFAULT-PERMISSIONS))
+  ([app-id app-access-token full-name app-installed? permissions]
+     (print-vals "Creating User : " full-name)
+     (->> (fb-request/create-user-request app-access-token permissions app-installed? full-name)
+          (http/post (fb-url/create-test-user-url app-id))
+          mapify-response-body)))
 
 (defn delete [user]
+  (print-vals "Deleting User : " (:id user))
   (http/post (fb-url/delete-test-user-url (:id user)) 
              (fb-request/empty-user-request (:access-token user))))
 
-(defn delete-all [app-id app-access-token]
-  (map delete (all app-id app-access-token)))
+(defn delete-all 
+  ([]
+     (delete-all context/APP-ID context/APP-ACCESS-TOKEN))
+  ([app-id app-access-token]
+     (print-vals "Deleting All Users")
+     (doseq [u (all app-id app-access-token)]
+       (delete u))))
 
-(defn make-friends [user friend]
-  (http/post 
-   (fb-url/friend-request-url (:id user) (:id friend)) 
-   (fb-request/empty-user-request (:access-token user)))
-
-  (http/post 
-   (fb-url/friend-request-url (:id friend) (:id user)) 
-   (fb-request/empty-user-request (:access-token friend))))
+(defn make-friend 
+  ([friend]
+     (make-friend (context/current-user) friend))
+  ([user friend]
+     (print-vals "Making " (:id user) " friend of " (:id friend))
+     (http/post 
+      (fb-url/friend-request-url (:id user) (:id friend)) 
+      (fb-request/empty-user-request (:access-token user)))
+     
+     (http/post 
+      (fb-url/friend-request-url (:id friend) (:id user)) 
+      (fb-request/empty-user-request (:access-token friend)))))
 
 (defn friends [user])
 
