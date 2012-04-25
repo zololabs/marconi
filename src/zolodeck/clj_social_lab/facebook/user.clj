@@ -39,6 +39,18 @@
              (fb-request/empty-user-request (:access-token user)))
   (context/remove-user! user))
 
+(defn delete-all 
+  ([]
+     (delete-all context/APP-ID context/APP-ACCESS-TOKEN))
+  ([users]
+     (delete-all context/APP-ID context/APP-ACCESS-TOKEN users))
+  ([app-id app-access-token]
+     (delete-all app-id app-access-token (all app-id app-access-token)))
+  ([app-id app-access-token users]
+     (print-vals "Deleting All Users")
+     (doseq [u users]
+       (delete u))))
+
 (defn make-friend 
   ([friend]
      (make-friend (context/current-user) friend))
@@ -60,4 +72,8 @@
 
 (defn facebook-id [user])
 
-(defn access-token [user])
+(defn access-token 
+  ([]
+     (access-token (context/current-user)))
+  ([user]
+     (:access-token user)))

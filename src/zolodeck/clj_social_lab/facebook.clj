@@ -23,12 +23,16 @@
   (reset! context/CURRENT-USER user))
 
 (defmacro in-facebook-lab [app-id app-secret & body]
-  `(binding [context/APP-ID ~app-id
-             context/APP-ACCESS-TOKEN (app-access-token ~app-id ~app-secret)]
-     (try 
-      ~@body
-      (finally 
-       (map user/delete (context/all-users))))))
+  `(if (and ~app-id ~app-secret)
+     (do
+       (context/reset-users!)
+       (binding [context/APP-ID ~app-id
+                 context/APP-ACCESS-TOKEN (app-access-token ~app-id ~app-secret)]
+         (try 
+          ~@body
+          (finally 
+           (user/delete-all (context/all-users))))))
+     (throw (Exception. "App Id or App Secret is not Set properly"))))
 
 
 

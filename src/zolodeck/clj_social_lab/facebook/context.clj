@@ -14,6 +14,9 @@
 
 (def DEFAULT-PERMISSIONS "email,friends_about_me,friends_birthday,friends_relationship_details,friends_location,friends_likes,friends_website,read_mailbox,offline_access")
 
+(defn reset-users! []
+  (reset! ALL-USERS {}))
+
 (defn add-user! [user]
   (swap! ALL-USERS merge {(:id user) user})
   user)
