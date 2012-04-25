@@ -1,6 +1,6 @@
 (ns zolodeck.clj-social-lab.facebook.user
-  (:use zolodeck.clj-social-lab.utils.debug
-        zolodeck.clj-social-lab.utils.core)
+  (:use zolodeck.utils.debug
+        zolodeck.utils.maps)
   (:require [zolodeck.clj-social-lab.facebook.request :as fb-request]
             [zolodeck.clj-social-lab.facebook.url :as fb-url]
             [zolodeck.clj-social-lab.facebook.context :as context]

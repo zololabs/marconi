@@ -1,7 +1,7 @@
 (ns zolodeck.clj-social-lab.facebook.user-test
   (:use [clojure.test :only [run-tests deftest is are testing]]
         zolodeck.clj-social-lab.facebook
-        zolodeck.clj-social-lab.utils.core)
+        zolodeck.utils.system)
   (:require [zolodeck.clj-social-lab.facebook.user :as user]))
 
   ;; init-facebook-lab

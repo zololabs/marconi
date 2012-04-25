@@ -1,7 +1,6 @@
 (ns zolodeck.clj-social-lab.facebook.context
   (:use 
-   zolodeck.clj-social-lab.utils.debug
-   zolodeck.clj-social-lab.utils.core))
+   zolodeck.utils.debug))
 
 (def ^:dynamic APP-ID)
 (def ^:dynamic APP-ACCESS-TOKEN)

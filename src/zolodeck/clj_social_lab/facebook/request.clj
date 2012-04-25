@@ -1,6 +1,5 @@
 (ns zolodeck.clj-social-lab.facebook.request
-  (:use zolodeck.clj-social-lab.utils.debug
-        zolodeck.clj-social-lab.utils.core)
+  (:use zolodeck.utils.debug)
   (:require [uri.core :as uri]))
 
 (defn encoded-request-params [body-map]
