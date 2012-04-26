@@ -9,7 +9,9 @@
 
                  [joda-time "1.6"]
                  [clj-time "0.3.7"]
-                 [slingshot "0.10.2"]]
+                 [slingshot "0.10.2"]
+
+                 [zolodeck/zolo-utils "0.1.0-SNAPSHOT"]]
 
   :plugins [[lein-swank "1.4.4"]
             [lein-pprint "1.1.1"]
