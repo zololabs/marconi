@@ -1,4 +1,4 @@
-(defproject clj-social-lab "1.0.0-SNAPSHOT"
+(defproject zolodeck/clj-social-lab "1.0.0-SNAPSHOT"
   :description "Library to do integration test with Social Networks"
   
   :dependencies [[org.clojure/clojure "1.4.0"]
