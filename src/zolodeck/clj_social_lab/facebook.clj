@@ -30,7 +30,9 @@
          (try 
           ~@body
           (finally 
-           (user/delete-all (context/all-users))))))
+           (user/delete-all (context/all-users))
+           (context/clear-messages!)
+           ))))
      (throw (Exception. "App Id or App Secret is not Set properly"))))
 
 

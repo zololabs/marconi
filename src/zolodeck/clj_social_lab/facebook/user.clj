@@ -64,6 +64,25 @@
       (fb-url/friend-request-url (:id friend) (:id user)) 
       (fb-request/empty-user-request (:access-token friend)))))
 
+(defn send-message 
+  ([to msg yyyy-mm-dd]
+     (send-message (context/current-user) to msg yyyy-mm-dd))
+  ([from to msg yyyy-mm-dd]
+     (print-vals "Sending Message at " yyyy-mm-dd " from" (:name from) " to " (:name to) " :" msg)
+     (context/add-message! from to msg yyyy-mm-dd)))
+
+(defn receive-message 
+  ([from msg yyyy-mm-dd]
+     (receive-message from (context/current-user) msg yyyy-mm-dd))
+  ([from to msg yyyy-mm-dd]
+     (send-message from to msg yyyy-mm-dd)))
+
+(defn messages 
+  ([]
+     (messages (context/current-user)))
+  ([user]
+     (context/messages)))
+
 (defn friends [user])
 
 (defn news-feed [user])
