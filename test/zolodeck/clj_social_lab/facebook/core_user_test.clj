@@ -8,7 +8,7 @@
 (def app-secret (system-env "SOCIAL_LAB_TEST_APP_SECRET"))
 
 (deftest test-basic-fb-functionality
-  (in-facebook-lab app-id app-secret
+  (in-facebook-lab 
     (let [jack (create-user "Jack")
           jill (create-user "Jill")]
       (login-as jack)

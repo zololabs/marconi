@@ -1,9 +1,5 @@
 (ns zolodeck.clj-social-lab.facebook.core
-  (:use zolodeck.utils.debug)
-  (:require [zolodeck.clj-social-lab.facebook.url :as fb-url]
-            [zolodeck.clj-social-lab.facebook.request :as fb-request]
-            [clj-http.client :as http]
-            [uri.core :as uri]))
+  (:use zolodeck.utils.debug))
 
 (def ^:dynamic TEST-STATE)
 
@@ -20,14 +16,6 @@
 
 (defn get-from-state [key-seq]
   (get-in @TEST-STATE key-seq))
-
-(defn app-access-token [app-id app-secret]
-  (print-vals "Getting App Access Token")
-  (->> (fb-request/access-token-request app-id app-secret) 
-       (http/post (fb-url/app-access-token-url))
-       :body
-       uri/form-url-decode
-       :access_token))
 
 (defn login-as [user]
   (print-vals "Logging in as:" (:name user) "-" (:id user))
@@ -55,10 +43,7 @@
 (defn dump-test-state []
   (print-vals "TEST-STATE:" @TEST-STATE))
 
-(defmacro in-facebook-lab [app-id app-secret & body]
-  `(if-not (and ~app-id ~app-secret)
-     (throw (RuntimeException. "You need to provide both an App ID and an App Secret"))
-     (do
-       (binding [TEST-STATE (atom {})]
-         (try 
-          ~@body)))))
+(defmacro in-facebook-lab [& body]
+  `(binding [TEST-STATE (atom {})]
+     (try 
+       ~@body)))
