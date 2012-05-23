@@ -3,6 +3,7 @@
   
   :dependencies [[org.clojure/clojure "1.4.0"]
                  
+                 [ring "1.0.2" :exclude [org.clojure/clojure]]                 
                  [org.clojure/data.json "0.1.2"  :exclude [org.clojure/clojure]]
                  [clj-http "0.3.6"]
                  [clj-oauth2 "0.2.0"]

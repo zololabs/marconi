@@ -1,5 +1,7 @@
 (ns zolodeck.clj-social-lab.facebook.core
-  (:use zolodeck.utils.debug))
+  (:use zolodeck.clj-social-lab.facebook.factory
+        zolodeck.utils.debug
+        zolodeck.utils.clojure))
 
 (def ^:dynamic TEST-STATE)
 
@@ -21,18 +23,34 @@
   (print-vals "Logging in as:" (:name user) "-" (:id user))
   (assoc-in-state! [:current-user] user))
 
-(defn create-user [full-name]
-  (->> {:name full-name :id (rand-int 1e8)}
-       (assoc-in-state! [:users full-name])))
+(defn create-user [first-name last-name]
+  (let [id (str (random-integer))
+        user {:gender (select-randomly "female" "male"),
+              :last_name last-name
+              :link (str "http://www.facebook.com/profile.php?id=" id)
+              :email (str first-name "." last-name "@gmail.com")
+              :timezone (select-randomly -1 -2 -3 -4 -5 -6 -7 -8 -9 -10 -11)
+              :name (str first-name " Middle " last-name)
+              :locale "en_US"
+              :updated_time "2012-05-21T04:50:43+0000"
+              :first_name first-name
+              :id id
+              :access-token (random-guid)}]
+    (assoc-in-state! [:users (:id user)] user)))
 
 (defn make-friend [main-user other-user]
   (print-vals "Making friend:" (:name main-user) "<->" (:name other-user))
-  (assoc-in-state! [:friends (:id main-user)] (:id other-user))
-  (assoc-in-state! [:friends (:id other-user)] (:id main-user)))
+  (append-in-state! [:friends (:id main-user)] (:id other-user))
+  (append-in-state! [:friends (:id other-user)] (:id main-user)))
 
-(defn send-message [from-user to-user message date]
-  (print-vals "Message on" date "from" (:name from-user) "to" (:name to-user) ":" message)
-  (let [msg {:from (:id from-user) :to (:id to-user) :message message :date date}]
+(defn fetch-friends [user]
+  (print-vals "Fetching friends for" (:name user))
+  (->> (get-from-state [:friends (:id user)])
+       (map #(as-friend (get-from-state [:users (:id %)])))))
+
+(defn send-message [from-user to-user thread-id message yyyy-mm-dd-string]
+  (print-vals "Message on" yyyy-mm-dd-string "from" (:name from-user) "to" (:name to-user) ":" message)
+  (let [msg (new-message from-user to-user thread-id message yyyy-mm-dd-string)]
     (append-in-state! [:messages (:id from-user)] msg)
     (append-in-state! [:messages (:id to-user)] msg)))
 
