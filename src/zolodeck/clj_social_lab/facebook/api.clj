@@ -3,20 +3,40 @@
         zolodeck.utils.debug
         zolodeck.utils.calendar
         zolodeck.utils.clojure
+        zolodeck.utils.maps
         [slingshot.slingshot :only [throw+ try+]])
-  (:require [zolodeck.clj-social-lab.facebook :as fb]
-            [zolodeck.clj-social-lab.facebook.user :as fb-user]
-            [clj-facebook-graph.auth :as fb-auth]
+  (:require [clj-facebook-graph.auth :as fb-auth]
+            [clj-http.client :as http]
+            [uri.core :as uri]
+            [zolodeck.clj-social-lab.facebook.request :as fb-request]
+            [zolodeck.clj-social-lab.facebook.url :as fb-url]
+            [clojure.data.json :as json]
             [clj-facebook-graph.client :as fb-client]))
+
+(defn app-access-token [app-id app-secret]
+  (print-vals "Getting App Access Token")
+  (->> (fb-request/access-token-request app-id app-secret) 
+       (http/post (fb-url/app-access-token-url))
+       :body
+       uri/form-url-decode
+       :access_token))
 
 (def APP-ID (system-env "SOCIAL_LAB_TEST_APP_ID"))
 (def APP-SECRET (system-env "SOCIAL_LAB_TEST_APP_SECRET"))
-(def APP-ACCESS-TOKEN (fb/app-access-token APP-ID APP-SECRET))
+(def APP-ACCESS-TOKEN (app-access-token APP-ID APP-SECRET))
 (def DEFAULT-PERMISSIONS "email,friends_about_me,friends_birthday,friends_relationship_details,friends_location,friends_likes,friends_website,read_mailbox,offline_access")
 
 (defn run-fql [auth-token query-string]
   (:body (fb-auth/with-facebook-auth {:access-token auth-token} 
            (fb-client/get :fql {:fql query-string}))))
+
+(defn all [app-id app-access-token]
+  (->> (fb-request/empty-user-request app-access-token)
+       (http/get (fb-url/all-test-user-url app-id app-access-token))
+       :body
+       json/read-json
+       :data
+       (map keywordize-map)))
 
 (defn user-from-fb [auth-token]
   (-> (fb-auth/with-facebook-auth {:access-token auth-token} 
@@ -25,7 +45,7 @@
       (assoc :access-token auth-token)))
 
 (defn all-users []
-  (map #(user-from-fb (:access-token %)) (fb-user/all APP-ID APP-ACCESS-TOKEN)))
+  (map #(user-from-fb (:access-token %)) (all APP-ID APP-ACCESS-TOKEN)))
 
 (defn friends-list [user]
   (fb-auth/with-facebook-auth {:access-token (:access-token user)} 
