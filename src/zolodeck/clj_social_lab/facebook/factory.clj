@@ -2,6 +2,21 @@
   (:use zolodeck.utils.clojure
         zolodeck.utils.calendar))
 
+(defn new-user [first-name last-name]
+  (let [id (str (random-integer))
+        user {:gender (select-randomly "female" "male"),
+              :last_name last-name
+              :link (str "http://www.facebook.com/profile.php?id=" id)
+              :email (str first-name "." last-name "@gmail.com")
+              :timezone (select-randomly -1 -2 -3 -4 -5 -6 -7 -8 -9 -10 -11)
+              :name (str first-name " Middle " last-name)
+              :locale "en_US"
+              :updated_time "2012-05-21T04:50:43+0000"
+              :first_name first-name
+              :id id
+              :access-token (random-guid)}]
+    user))
+
 (defn as-friend [user]
   (let [id (:id user)]
     {:gender (:gender user)
