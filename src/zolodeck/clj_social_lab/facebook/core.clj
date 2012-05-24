@@ -52,5 +52,5 @@
 
 (defmacro in-facebook-lab [& body]
   `(binding [TEST-STATE (atom {})]
-     (try 
+     (do 
        ~@body)))
