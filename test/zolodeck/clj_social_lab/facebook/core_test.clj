@@ -5,8 +5,17 @@
         zolodeck.utils.debug)
   (:require [zolodeck.clj-social-lab.facebook.api :as api]))
 
+(defmacro in-test-env [& body]
+  `(binding [api/APP-ID (system-env "SOCIAL_LAB_TEST_APP_ID")
+             api/APP-SECRET (system-env "SOCIAL_LAB_TEST_APP_SECRET")
+             api/APP-ACCESS-TOKEN (api/app-access-token
+                                   (system-env "SOCIAL_LAB_TEST_APP_ID")
+                                   (system-env "SOCIAL_LAB_TEST_APP_SECRET"))]
+     (do ~@body)))
+
 (deftest test-basic-fb-functionality
-  (in-facebook-lab 
+  (in-test-env
+   (in-facebook-lab 
     (let [jack (create-user "Jack" "Mulder")
           jill (create-user "Jill" "Sculley")
           joe (create-user "Joe" "Conrad")]
@@ -30,6 +39,6 @@
         
         (is (= (sort (keys an-fb-user)) (sort (keys jack))))
         (is (= (sort (keys an-fb-friend)) (sort (keys a-dummy-friend))))
-        (is (= (sort (keys an-fb-message)) (sort (keys a-dummy-message))))))))
+        (is (= (sort (keys an-fb-message)) (sort (keys a-dummy-message)))))))))
 
 

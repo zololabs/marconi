@@ -1,6 +1,5 @@
 (ns zolodeck.clj-social-lab.facebook.api
-  (:use zolodeck.utils.system
-        zolodeck.utils.debug
+  (:use zolodeck.utils.debug
         zolodeck.utils.calendar
         zolodeck.utils.clojure
         zolodeck.utils.maps
@@ -21,9 +20,10 @@
        uri/form-url-decode
        :access_token))
 
-(def APP-ID (system-env "SOCIAL_LAB_TEST_APP_ID"))
-(def APP-SECRET (system-env "SOCIAL_LAB_TEST_APP_SECRET"))
-(def APP-ACCESS-TOKEN (app-access-token APP-ID APP-SECRET))
+(def ^:dynamic APP-ID)
+(def ^:dynamic APP-SECRET)
+(def ^:dynamic APP-ACCESS-TOKEN)
+
 (def DEFAULT-PERMISSIONS "email,friends_about_me,friends_birthday,friends_relationship_details,friends_location,friends_likes,friends_website,read_mailbox,offline_access")
 
 (defn run-fql [auth-token query-string]
