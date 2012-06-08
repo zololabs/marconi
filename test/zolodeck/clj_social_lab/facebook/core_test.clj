@@ -23,7 +23,12 @@
       (make-friend jack jill)
       (make-friend jack joe)
       (is (= 2 (count (fetch-friends jack))))
-      
+
+      (let [dummy-friend (first (sort-by :first_name (fetch-friends jack)))]
+        (are [expected attrib] (= expected (dummy-friend attrib))
+             "Jill" :first_name
+             "Sculley" :last_name))
+
       (send-message jack jill "1" "Hey Jill, I am going to fetch" "2012-05-01")
       (send-message jill jack "1" "Sure I will come" "2012-05-02")
       (send-message jack jill "1" "Great see you soon" "2012-05-03")

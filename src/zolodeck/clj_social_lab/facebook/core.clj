@@ -35,7 +35,7 @@
 (defn fetch-friends [user]
   (print-vals "Fetching friends for" (:name user))
   (->> (get-from-state [:friends (:id user)])
-       (map #(as-friend (get-from-state [:users (:id %)])))))
+       (map #(as-friend (get-from-state [:users %])))))
 
 (defn send-message [from-user to-user thread-id message yyyy-mm-dd-string]
   (print-vals "Message on" yyyy-mm-dd-string "from" (:name from-user) "to" (:name to-user) ":" message)
