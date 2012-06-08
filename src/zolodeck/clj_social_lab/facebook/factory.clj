@@ -15,7 +15,6 @@
                  :updated_time "2012-05-21T04:50:43+0000"
                  :first_name first-name
                  :id id
-                 :username (str "username-" first-name)
                  :access-token (random-guid)}]
        user))
   ([]
