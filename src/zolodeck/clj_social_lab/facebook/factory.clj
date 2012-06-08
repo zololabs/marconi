@@ -15,6 +15,7 @@
                  :updated_time "2012-05-21T04:50:43+0000"
                  :first_name first-name
                  :id id
+                 :username (str "username-" first-name)
                  :access-token (random-guid)}]
        user))
   ([]
@@ -31,6 +32,9 @@
      :id id
      :birthday "08/08/1980",
      :picture (str "http://profile.ak.fbcdn.net/static-ak/rsrc.php/v1/yo/r/" id ".gif")}))
+
+(defn as-friends [users]
+  (map as-friend users))
 
 (defn new-message [from-user to-user thread-id message yyyy-mm-dd-string]
   {:attachment []
