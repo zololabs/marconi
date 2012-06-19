@@ -19,6 +19,9 @@
 (defn get-from-state [key-seq]
   (get-in @TEST-STATE key-seq))
 
+(defn get-user [id]
+  (get-from-state [:users id]))
+
 (defn login-as [user]
   (print-vals "Logging in as:" (:name user) "-" (:id user))
   (assoc-in-state! [:current-user] user))
@@ -27,8 +30,13 @@
   (let [user (new-user first-name last-name)]
     (assoc-in-state! [:users (:id user)] user)))
 
-(defn make-friend [main-user other-user]
-  (print-vals "Making friend:" (:name main-user) "<->" (:name other-user))
+(defn update-user [id attribs-map]
+  (->> attribs-map
+       (merge (get-from-state [:users id]))
+       (assoc-in-state! [:users id])))
+
+(defn make-friend [{main-id :id :as main-user} {other-id :id :as other-user}]
+  (print-vals "Making friend:" (:name (get-user main-id)) "<->" (:name (get-user other-id)))
   (append-in-state! [:friends (:id main-user)] (:id other-user))
   (append-in-state! [:friends (:id other-user)] (:id main-user)))
 
