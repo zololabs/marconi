@@ -29,7 +29,7 @@
      :locale "en_US",
      :first_name (:first_name user)
      :id id
-     :birthday "08/08/1980",
+     :birthday (:birthday user),
      :picture (str "http://profile.ak.fbcdn.net/static-ak/rsrc.php/v1/yo/r/" id ".gif")}))
 
 (defn as-friends [users]
