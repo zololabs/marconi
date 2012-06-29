@@ -57,14 +57,26 @@
                     :paging true})))
 
 (defn message-fql [thread-id]
-  (str "SELECT message_id, thread_id, author_id, body, created_time, attachment, viewer_id FROM message WHERE thread_id = " thread-id))
+  (str "SELECT message_id, thread_id, author_id, body, created_time, attachment FROM message WHERE thread_id = " thread-id))
 
-(defn fetch-thread-messages [auth-token thread-id]
-  (run-fql auth-token (message-fql thread-id)))
+(defn update-message [subject recipient msg]
+  (when-not (= recipient (:author_id msg))
+    (-> msg
+        (assoc :subject subject)
+        (assoc :to recipient))))
+
+(defn expand-messages [subject recipients messages]
+  (mapcat
+   (fn [msg]
+     (keep #(update-message subject % msg) recipients))
+   messages))
+
+(defn fetch-thread-messages [auth-token {:keys [thread_id recipients subject] :as thread-info}]
+  (->> (run-fql auth-token (message-fql thread_id))
+       (expand-messages subject recipients)))
 
 (defn fetch-messages [{:keys [access-token]}]
   (print-vals "Access-token:" access-token)
-  (->> "SELECT thread_id FROM thread WHERE folder_id = 0"
+  (->> "SELECT thread_id, recipients, subject FROM thread WHERE folder_id = 0"
        (run-fql access-token)
-       (map :thread_id)
        (mapcat (partial fetch-thread-messages access-token))))

@@ -42,7 +42,8 @@
    :created_time (.getTime (date-string->instant "yyyy-MM-dd" yyyy-mm-dd-string))
    :message_id (str (random-integer))
    :thread_id thread-id
-   :viewer_id (:id to-user)})
+   :subject "fake thread subject"
+   :to (:id to-user)})
 
 (defn sample-friends [n]
   (repeatedly n #(as-friend (new-user ))))
