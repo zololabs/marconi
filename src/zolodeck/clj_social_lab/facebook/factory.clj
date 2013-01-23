@@ -5,7 +5,8 @@
 (defn new-user 
   ([first-name last-name]
      (let [id (str (random-integer))
-           user {:gender (select-randomly "female" "male"),
+           gender (select-randomly "female" "male")
+           user {:gender gender
                  :last_name last-name
                  :link (str "http://www.facebook.com/profile.php?id=" id)
                  :email (str first-name "." last-name "@gmail.com")
@@ -15,7 +16,15 @@
                  :updated_time "2012-05-21T04:50:43+0000"
                  :first_name first-name
                  :id id
-                 :access-token (random-guid)}]
+                 :uid id
+                 :access-token (str (random-guid))
+                 :username id
+                 :sex gender
+                 :birthday_date "04/17/1976"
+                 :current_location {:country "USA" :state "CA" :city "Foster City" :zip "94404"}
+                 :pic_small (str "http://www.facebook.com/small" id ".png")
+                 :pic_big (str "http://www.facebook.com/big " id ".png")
+                 :profile_url (str "http://www.facebook.com/profile.php?id=" id)}]
        user))
   ([]
      (new-user (str (random-guid)) (str (random-guid)))))

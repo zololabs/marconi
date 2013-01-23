@@ -55,6 +55,20 @@
   (print-vals "Fetching messages for" (:name user))
   (get-from-state [:messages (:id user)]))
 
+(defn extended-user-info [access-token user-id]
+  (print-vals "user id :  " user-id)
+  (-> (get-from-state [:users user-id])
+      (select-keys [:uid :first_name :last_name :username :sex :birthday_date :locale :current_location :email :pic_small :pic_big :profile_url])
+      print-vals))
+
+(defn login-creds [user]
+  {:providerLoginInfo
+   {:authResponse
+    {:userID (:id user)
+     :accessToken (:access-token user)
+     :expiresIn "5855"}
+    :status "connected"}})
+
 (defn dump-test-state []
   (print-vals "TEST-STATE:" @TEST-STATE))
 
