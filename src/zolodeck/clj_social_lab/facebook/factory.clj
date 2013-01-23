@@ -20,7 +20,7 @@
                  :access-token (str (random-guid))
                  :username id
                  :sex gender
-                 :birthday_date "04/17/1976"
+                 :birthday_date "4/17/1976"
                  :current_location {:country "USA" :state "CA" :city "Foster City" :zip "94404"}
                  :pic_small (str "http://www.facebook.com/small" id ".png")
                  :pic_big (str "http://www.facebook.com/big " id ".png")
