@@ -56,10 +56,8 @@
   (get-from-state [:messages (:id user)]))
 
 (defn extended-user-info [access-token user-id]
-  (print-vals "user id :  " user-id)
   (-> (get-from-state [:users user-id])
-      (select-keys [:uid :first_name :last_name :username :sex :birthday_date :locale :current_location :email :pic_small :pic_big :profile_url])
-      print-vals))
+      (select-keys [:uid :first_name :last_name :username :sex :birthday_date :locale :current_location :email :pic_small :pic_big :profile_url])))
 
 (defn login-creds [user]
   {:providerLoginInfo
