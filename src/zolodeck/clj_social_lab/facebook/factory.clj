@@ -1,6 +1,7 @@
 (ns zolodeck.clj-social-lab.facebook.factory
   (:use zolodeck.utils.clojure
-        zolodeck.utils.calendar))
+        zolodeck.utils.calendar
+        zolodeck.utils.debug))
 
 (defn new-user 
   ([first-name last-name]
@@ -49,10 +50,9 @@
   {:attachment []
    :author_id (:id from-user)
    :body  message
-   :created_time (.getTime (date-string->instant "yyyy-MM-dd" yyyy-mm-dd-string))
+   :created_time (/ (.getTime (date-string->instant "yyyy-MM-dd" yyyy-mm-dd-string)) 1000)
    :message_id (str (random-integer))
    :thread_id thread-id
-   :subject "fake thread subject"
    :to [(:id to-user)]})
 
 (defn sample-friends [n]
