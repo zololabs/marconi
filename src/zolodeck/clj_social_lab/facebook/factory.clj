@@ -38,8 +38,9 @@
      :locale "en_US",
      :first_name (:first_name user)
      :id id
-     :birthday (:birthday user),
-     :picture (str "http://profile.ak.fbcdn.net/static-ak/rsrc.php/v1/yo/r/" id ".gif")}))
+     :username (str "username-" id)
+     :birthday (:birthday_date user),
+     :picture {:data {:url (str "http://profile.ak.fbcdn.net/static-ak/rsrc.php/v1/yo/r/" id ".gif")}}}))
 
 (defn as-friends [users]
   (map as-friend users))

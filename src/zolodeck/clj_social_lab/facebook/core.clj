@@ -30,6 +30,10 @@
   (let [user (new-user first-name last-name)]
     (assoc-in-state! [:users (:id user)] user)))
 
+(defn create-friend [first-name last-name]
+  (-> (create-user first-name last-name)
+      as-friend))
+
 (defn update-user [id attribs-map]
   (->> attribs-map
        (merge (get-from-state [:users id]))
@@ -55,9 +59,8 @@
   (print-vals "Fetching messages for" (:name user))
   (get-from-state [:messages (:id user)]))
 
-(defn extended-user-info [access-token user-id]
-  (-> (get-from-state [:users user-id])
-      (select-keys [:uid :first_name :last_name :username :sex :birthday_date :locale :current_location :email :pic_small :pic_big :profile_url])))
+(defn extended-user-info [user]
+  (select-keys user [:uid :first_name :last_name :username :sex :birthday_date :locale :current_location :email :pic_small :pic_big :profile_url]))
 
 (defn login-creds [user]
   {:providerLoginInfo
