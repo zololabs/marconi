@@ -26,6 +26,9 @@
   (print-vals "Logging in as:" (:name user) "-" (:id user))
   (assoc-in-state! [:current-user] user))
 
+(defn current-user []
+  (get-from-state [:current-user]))
+
 (defn create-user [first-name last-name]
   (let [user (new-user first-name last-name)]
     (assoc-in-state! [:users (:id user)] user)))
@@ -53,7 +56,8 @@
   (print-vals "Message on" yyyy-mm-dd-string "from" (:name from-user) "to" (:name to-user) ":" message)
   (let [msg (new-message from-user to-user thread-id message yyyy-mm-dd-string)]
     (append-in-state! [:messages (:id from-user)] msg)
-    (append-in-state! [:messages (:id to-user)] msg)))
+    (append-in-state! [:messages (:id to-user)] msg)
+    msg))
 
 (defn fetch-messages [user]
   (print-vals "Fetching messages for" (:name user))

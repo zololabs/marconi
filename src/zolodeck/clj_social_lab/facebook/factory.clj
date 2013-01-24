@@ -47,13 +47,13 @@
 
 (defn new-message [from-user to-user thread-id message yyyy-mm-dd-string]
   {:attachment []
-   :author_id (parse-int (:id from-user))
+   :author_id (:id from-user)
    :body  message
    :created_time (.getTime (date-string->instant "yyyy-MM-dd" yyyy-mm-dd-string))
    :message_id (str (random-integer))
    :thread_id thread-id
    :subject "fake thread subject"
-   :to (:id to-user)})
+   :to [(:id to-user)]})
 
 (defn sample-friends [n]
   (repeatedly n #(as-friend (new-user ))))
