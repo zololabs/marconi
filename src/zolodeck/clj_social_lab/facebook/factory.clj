@@ -55,5 +55,17 @@
    :thread_id thread-id
    :to [(:id to-user)]})
 
+(defn new-post [from-user to-user post-message yyyy-mm-dd-string]
+  (let [id (str (random-integer))]
+    {:id id
+     :from (:id from-user)
+     :created_time (/ (.getTime (date-string->instant "yyyy-MM-dd" yyyy-mm-dd-string)) 1000)
+     :message post-message
+     :story (str "Story for : " post-message)
+     :to (:id to-user)
+     :picture (str "http://facebook.post.picture" id ".gif")
+     :link (str "http://facebook.post.link" id ".gif")
+     :icon (str "http://facebook.post.icon" id ".gif")}))
+
 (defn sample-friends [n]
   (repeatedly n #(as-friend (new-user ))))

@@ -63,6 +63,16 @@
   (print-vals "Fetching messages for" (:name user))
   (get-from-state [:messages (:id user)]))
 
+(defn post-to-wall [from-user to-user post-message yyyy-mm-dd-string]
+  (print-vals "Post on" yyyy-mm-dd-string "from" (:name from-user) "to" (:name to-user) ":" post-message)
+  (let [post (new-post from-user to-user post-message yyyy-mm-dd-string)]
+    (append-in-state! [:posts (:id to-user)] post)
+    post))
+
+(defn fetch-feeds [user]
+  (print-vals "Fetching feeds for" (:name user))
+  (get-from-state [:posts (:id user)]))
+
 (defn extended-user-info [user]
   (select-keys user [:uid :first_name :last_name :username :sex :birthday_date :locale :current_location :email :pic_small :pic_big :profile_url]))
 
