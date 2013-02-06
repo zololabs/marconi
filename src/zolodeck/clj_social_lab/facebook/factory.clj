@@ -60,7 +60,7 @@
     {:id id
      :from {:name (:first_name from-user)
             :id (:id from-user)}
-     :created_time (/ (.getTime (date-string->instant "yyyy-MM-dd" yyyy-mm-dd-string)) 1000)
+     :created_time (str yyyy-mm-dd-string  "T07:09:55+0000")
      :message post-message
      :story (str "Story for : " post-message)
      :to {:data [{:name (:first_name to-user) 
@@ -68,7 +68,4 @@
      :picture (str "http://facebook.post.picture" id ".gif")
      :link (str "http://facebook.post.link" id ".gif")
      :icon (str "http://facebook.post.icon" id ".gif")}))
-
-(defn sample-friends [n]
-  (repeatedly n #(as-friend (new-user))))
 

@@ -20,7 +20,7 @@
   :dev-dependencies [[clj-stacktrace "0.2.4"]
                      [clojure-csv/clojure-csv "2.0.0-alpha1"]]
   
-  :min-lein-version "1.7.0"
+  :min-lein-version "2.0.0"
 
   :test-selectors {:default (fn [t] (not (:integration t)))
                    :integration :integration

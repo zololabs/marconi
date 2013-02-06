@@ -37,6 +37,10 @@
   (-> (create-user first-name last-name)
       as-friend))
 
+(defn create-friends [prefix n]
+  (for [i (range 1 (inc n))]
+    (create-friend (str "first-name-" prefix "-" i) (str "last-name-" prefix "-" i))))
+
 (defn update-user [id attribs-map]
   (->> attribs-map
        (merge (get-from-state [:users id]))
