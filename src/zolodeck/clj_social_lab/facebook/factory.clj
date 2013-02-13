@@ -68,5 +68,6 @@
                     :id (:id to-user)}]}
      :picture (str "http://facebook.post.picture" id ".gif")
      :link (str "http://facebook.post.link" id ".gif")
-     :icon (str "http://facebook.post.icon" id ".gif")}))
+     :icon (str "http://facebook.post.icon" id ".gif")
+     :type "post"}))
 
