@@ -41,7 +41,8 @@
      :id id
      :username (str "username-" id)
      :birthday (:birthday_date user),
-     :picture {:data {:url (str "http://profile.ak.fbcdn.net/static-ak/rsrc.php/v1/yo/r/" id ".gif")}}}))
+     :picture {:data {:url (str "http://profile.ak.fbcdn.net/static-ak/rsrc.php/v1/yo/r/" id ".gif")
+                      :is_silhouette false}}}))
 
 (defn as-friends [users]
   (map as-friend users))
