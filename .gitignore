@@ -24,3 +24,4 @@ furtive.iml
 /clj-social-lab-1.0.0-SNAPSHOT.jar
 /pom.xml
 target
+.lein-repl-history
