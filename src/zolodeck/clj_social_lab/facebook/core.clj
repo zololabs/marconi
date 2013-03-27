@@ -16,6 +16,9 @@
 (defn append-in-state! [key-seq value]
   (update-in-state! key-seq conj value))
 
+(defn remove-from-state! [key-seq value]
+  (assoc-in-state! key-seq (remove #(= value %) (get-from-state key-seq))))
+
 (defn get-from-state [key-seq]
   (get-in @TEST-STATE key-seq))
 
@@ -46,10 +49,19 @@
        (merge (get-from-state [:users id]))
        (assoc-in-state! [:users id])))
 
+(defn update-friend [id attribs-map]
+  (-> (update-user id attribs-map)
+      as-friend))
+
 (defn make-friend [{main-id :id :as main-user} {other-id :id :as other-user}]
   (print-vals "Making friend:" (:name (get-user main-id)) "<->" (:name (get-user other-id)))
   (append-in-state! [:friends (:id main-user)] (:id other-user))
   (append-in-state! [:friends (:id other-user)] (:id main-user)))
+
+(defn unfriend [{main-id :id :as main-user} {other-id :id :as other-user}]
+  (print-vals "Unfriending :" (:name (get-user main-id)) "<->" (:name (get-user other-id)))
+  (remove-from-state! [:friends (:id main-user)] (:id other-user))
+  (remove-from-state! [:friends (:id other-user)] (:id main-user)))
 
 (defn fetch-friends [user]
   (print-vals "Fetching friends for" (:name user))
