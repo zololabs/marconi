@@ -5,6 +5,9 @@
 
 (def ^:dynamic TEST-STATE)
 
+(defn get-from-state [key-seq]
+  (get-in @TEST-STATE key-seq))
+
 (defn assoc-in-state! [key-seq value]
   (swap! TEST-STATE assoc-in key-seq value)
   value)
@@ -18,9 +21,6 @@
 
 (defn remove-from-state! [key-seq value]
   (assoc-in-state! key-seq (remove #(= value %) (get-from-state key-seq))))
-
-(defn get-from-state [key-seq]
-  (get-in @TEST-STATE key-seq))
 
 (defn get-user [id]
   (get-from-state [:users id]))
