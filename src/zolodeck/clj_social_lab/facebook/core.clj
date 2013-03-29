@@ -75,6 +75,9 @@
     (append-in-state! [:messages (:id to-user)] msg)
     msg))
 
+(defn remove-all-messages [user]
+  (assoc-in-state! [:messages (:id user)] []))
+
 (defn fetch-messages [user]
   (print-vals "Fetching messages for" (:name user))
   (get-from-state [:messages (:id user)]))
