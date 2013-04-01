@@ -1,40 +1,22 @@
 (ns zolo.marconi.facebook.core
   (:use zolo.marconi.facebook.factory
         zolo.utils.debug
-        zolo.utils.clojure))
-
-(def ^:dynamic TEST-STATE)
-
-(defn get-from-state [key-seq]
-  (get-in @TEST-STATE key-seq))
-
-(defn assoc-in-state! [key-seq value]
-  (swap! TEST-STATE assoc-in key-seq value)
-  value)
-
-(defn update-in-state! [key-seq update-fn value]
-  (swap! TEST-STATE #(update-in %1 key-seq update-fn value))
-  value)
-
-(defn append-in-state! [key-seq value]
-  (update-in-state! key-seq conj value))
-
-(defn remove-from-state! [key-seq value]
-  (assoc-in-state! key-seq (remove #(= value %) (get-from-state key-seq))))
+        zolo.utils.clojure)
+  (:require [zolo.marconi.test-state :as state]))
 
 (defn get-user [id]
-  (get-from-state [:users id]))
+  (state/get-from-state [:users id]))
 
 (defn login-as [user]
   (print-vals "Logging in as:" (:name user) "-" (:id user))
-  (assoc-in-state! [:current-user] user))
+  (state/assoc-in-state! [:current-user] user))
 
 (defn current-user []
-  (get-from-state [:current-user]))
+  (state/get-from-state [:current-user]))
 
 (defn create-user [first-name last-name]
   (let [user (new-user first-name last-name)]
-    (assoc-in-state! [:users (:id user)] user)))
+    (state/assoc-in-state! [:users (:id user)] user)))
 
 (defn create-friend [first-name last-name]
   (-> (create-user first-name last-name)
@@ -46,8 +28,8 @@
 
 (defn update-user [id attribs-map]
   (->> attribs-map
-       (merge (get-from-state [:users id]))
-       (assoc-in-state! [:users id])))
+       (merge (state/get-from-state [:users id]))
+       (state/assoc-in-state! [:users id])))
 
 (defn update-friend [id attribs-map]
   (-> (update-user id attribs-map)
@@ -55,42 +37,42 @@
 
 (defn make-friend [{main-id :id :as main-user} {other-id :id :as other-user}]
   (print-vals "Making friend:" (:name (get-user main-id)) "<->" (:name (get-user other-id)))
-  (append-in-state! [:friends (:id main-user)] (:id other-user))
-  (append-in-state! [:friends (:id other-user)] (:id main-user)))
+  (state/append-in-state! [:friends (:id main-user)] (:id other-user))
+  (state/append-in-state! [:friends (:id other-user)] (:id main-user)))
 
 (defn unfriend [{main-id :id :as main-user} {other-id :id :as other-user}]
   (print-vals "Unfriending :" (:name (get-user main-id)) "<->" (:name (get-user other-id)))
-  (remove-from-state! [:friends (:id main-user)] (:id other-user))
-  (remove-from-state! [:friends (:id other-user)] (:id main-user)))
+  (state/remove-from-state! [:friends (:id main-user)] (:id other-user))
+  (state/remove-from-state! [:friends (:id other-user)] (:id main-user)))
 
 (defn fetch-friends [user]
   (print-vals "Fetching friends for" (:name user))
-  (->> (get-from-state [:friends (:id user)])
-       (map #(as-friend (get-from-state [:users %])))))
+  (->> (state/get-from-state [:friends (:id user)])
+       (map #(as-friend (state/get-from-state [:users %])))))
 
 (defn send-message [from-user to-user thread-id message yyyy-mm-dd-string]
   (print-vals "Message on" yyyy-mm-dd-string "from" (:name from-user) "to" (:name to-user) ":" message)
   (let [msg (new-message from-user to-user thread-id message yyyy-mm-dd-string)]
-    (append-in-state! [:messages (:id from-user)] msg)
-    (append-in-state! [:messages (:id to-user)] msg)
+    (state/append-in-state! [:messages (:id from-user)] msg)
+    (state/append-in-state! [:messages (:id to-user)] msg)
     msg))
 
 (defn remove-all-messages [user]
-  (assoc-in-state! [:messages (:id user)] []))
+  (state/assoc-in-state! [:messages (:id user)] []))
 
 (defn fetch-messages [user]
   (print-vals "Fetching messages for" (:name user))
-  (get-from-state [:messages (:id user)]))
+  (state/get-from-state [:messages (:id user)]))
 
 (defn post-to-wall [from-user to-user post-message yyyy-mm-dd-string]
   (print-vals "Post on" yyyy-mm-dd-string "from" (:name from-user) "to" (:name to-user) ":" post-message)
   (let [post (new-post from-user to-user post-message yyyy-mm-dd-string)]
-    (append-in-state! [:posts (:id to-user)] post)
+    (state/append-in-state! [:posts (:id to-user)] post)
     post))
 
 (defn fetch-feeds [user]
   (print-vals "Fetching feeds for" (:name user))
-  (get-from-state [:posts (:id user)]))
+  (state/get-from-state [:posts (:id user)]))
 
 (defn extended-user-info [user]
   (select-keys user [:uid :first_name :last_name :username :sex :birthday_date :locale :current_location :email :pic_small :pic_big :profile_url]))
@@ -103,10 +85,7 @@
      :expiresIn "5855"}
     :status "connected"}})
 
-(defn dump-test-state []
-  (print-vals "TEST-STATE:" @TEST-STATE))
-
 (defmacro in-facebook-lab [& body]
-  `(binding [TEST-STATE (atom {})]
+  `(binding [state/TEST-STATE (atom {})]
      (do 
        ~@body)))
