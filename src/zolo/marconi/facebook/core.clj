@@ -84,8 +84,3 @@
      :accessToken (:access-token user)
      :expiresIn "5855"}
     :status "connected"}})
-
-(defmacro in-facebook-lab [& body]
-  `(binding [state/TEST-STATE (atom {})]
-     (do 
-       ~@body)))
