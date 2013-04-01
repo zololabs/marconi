@@ -1,4 +1,4 @@
-(defproject zolo/marconi "1.0.0-SNAPSHOT"
+(defproject zololabs/marconi "1.0.0-SNAPSHOT"
   :description "Fake APIs for email-inboxes, social-networks, and more"
   
   :dependencies [[org.clojure/clojure "1.5.1"]
