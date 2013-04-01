@@ -2,7 +2,7 @@
   :description "Fake APIs for email-inboxes, social-networks, and more"
   
   :dependencies [[org.clojure/clojure "1.5.1"]
-                 [zolodeck/zolo-utils "0.1.0-SNAPSHOT"]]
+                 [zololabs/zolo-utils "0.1.0-SNAPSHOT"]]
 
   :plugins [[lein-swank "1.4.4"]
             [lein-pprint "1.1.1"]

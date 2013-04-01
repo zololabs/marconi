@@ -1,5 +1,5 @@
 (ns zolo.marconi.facebook.request
-  (:use zolodeck.utils.debug)
+  (:use zolo.utils.debug)
   (:require [uri.core :as uri]))
 
 (defn encoded-request-params [body-map]

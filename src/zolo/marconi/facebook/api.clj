@@ -1,8 +1,8 @@
 (ns zolo.marconi.facebook.api
-  (:use zolodeck.utils.debug
-        zolodeck.utils.calendar
-        zolodeck.utils.clojure
-        zolodeck.utils.maps
+  (:use zolo.utils.debug
+        zolo.utils.calendar
+        zolo.utils.clojure
+        zolo.utils.maps
         [slingshot.slingshot :only [throw+ try+]])
   (:require [clj-facebook-graph.auth :as fb-auth]
             [clj-http.client :as http]

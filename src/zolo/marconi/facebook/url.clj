@@ -1,5 +1,5 @@
 (ns zolo.marconi.facebook.url
-  (:use zolodeck.utils.debug)
+  (:use zolo.utils.debug)
   (:require [uri.core :as uri]))
 
 (defn app-access-token-url []  

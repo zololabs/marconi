@@ -1,7 +1,7 @@
 (ns zolo.marconi.facebook.factory
-  (:use zolodeck.utils.clojure
-        zolodeck.utils.calendar
-        zolodeck.utils.debug))
+  (:use zolo.utils.clojure
+        zolo.utils.calendar
+        zolo.utils.debug))
 
 (defn new-user 
   ([first-name last-name]

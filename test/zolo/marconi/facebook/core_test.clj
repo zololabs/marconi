@@ -1,8 +1,8 @@
 (ns zolo.marconi.facebook.core-test
   (:use [clojure.test :only [run-tests deftest is are testing]]
         zolo.marconi.facebook.core
-        zolodeck.utils.system
-        zolodeck.utils.debug))
+        zolo.utils.system
+        zolo.utils.debug))
 
 (deftest test-basic-fb-functionality
   (in-facebook-lab 
