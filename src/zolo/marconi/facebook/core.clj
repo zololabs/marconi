@@ -1,5 +1,5 @@
-(ns zolodeck.clj-social-lab.facebook.core
-  (:use zolodeck.clj-social-lab.facebook.factory
+(ns zolo.marconi.facebook.core
+  (:use zolo.marconi.facebook.factory
         zolodeck.utils.debug
         zolodeck.utils.clojure))
 

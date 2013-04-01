@@ -1,7 +1,7 @@
-(defproject zolodeck/clj-social-lab "1.0.0-SNAPSHOT"
-  :description "Library to do integration test with Social Networks"
+(defproject zolo/marconi "1.0.0-SNAPSHOT"
+  :description "Fake APIs for email-inboxes, social-networks, and more"
   
-  :dependencies [[org.clojure/clojure "1.4.0"]
+  :dependencies [[org.clojure/clojure "1.5.1"]
                  [zolodeck/zolo-utils "0.1.0-SNAPSHOT"]]
 
   :plugins [[lein-swank "1.4.4"]

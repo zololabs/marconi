@@ -1,4 +1,4 @@
-(ns zolodeck.clj-social-lab.facebook.factory
+(ns zolo.marconi.facebook.factory
   (:use zolodeck.utils.clojure
         zolodeck.utils.calendar
         zolodeck.utils.debug))

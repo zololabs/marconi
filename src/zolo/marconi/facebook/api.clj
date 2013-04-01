@@ -1,4 +1,4 @@
-(ns zolodeck.clj-social-lab.facebook.api
+(ns zolo.marconi.facebook.api
   (:use zolodeck.utils.debug
         zolodeck.utils.calendar
         zolodeck.utils.clojure
@@ -7,8 +7,8 @@
   (:require [clj-facebook-graph.auth :as fb-auth]
             [clj-http.client :as http]
             [uri.core :as uri]
-            [zolodeck.clj-social-lab.facebook.request :as fb-request]
-            [zolodeck.clj-social-lab.facebook.url :as fb-url]
+            [zolo.marconi.facebook.request :as fb-request]
+            [zolo.marconi.facebook.url :as fb-url]
             [clojure.data.json :as json]
             [clj-facebook-graph.client :as fb-client]))
 

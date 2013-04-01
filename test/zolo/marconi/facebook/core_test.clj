@@ -1,6 +1,6 @@
-(ns zolodeck.clj-social-lab.facebook.core-test
+(ns zolo.marconi.facebook.core-test
   (:use [clojure.test :only [run-tests deftest is are testing]]
-        zolodeck.clj-social-lab.facebook.core
+        zolo.marconi.facebook.core
         zolodeck.utils.system
         zolodeck.utils.debug))
 

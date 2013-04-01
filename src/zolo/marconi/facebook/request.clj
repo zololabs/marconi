@@ -1,4 +1,4 @@
-(ns zolodeck.clj-social-lab.facebook.request
+(ns zolo.marconi.facebook.request
   (:use zolodeck.utils.debug)
   (:require [uri.core :as uri]))
 
