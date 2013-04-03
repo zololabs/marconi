@@ -20,5 +20,8 @@
 (defn remove-from-state! [key-seq value]
   (assoc-in-state! key-seq (remove #(= value %) (get-from-state key-seq))))
 
+(defn all-state []
+  @TEST-STATE)
+
 (defn dump-test-state []
-  (print-vals "TEST-STATE:" @TEST-STATE))
+  (print-vals "TEST-STATE:" (all-state)))
