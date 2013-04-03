@@ -1,19 +1,19 @@
 (ns zolo.marconi.context-io.api
-  (:use zolo.utils.debug)
+  (:use zolo.utils.debug
+        zolo.utils.clojure)
   (:require [zolo.marconi.context-io.core :as cio]
             [zolo.utils.calendar :as zcal]))
 
-(defn fetch-contact [email-address]
-  :email "punitr@gmail.com",
-  :count 2112,
-  :name "Punit Rathore",
-  :received_count 44,
-  :sent_count 2068,
-  :sent_from_account_count 2063,
-  :thumbnail
-  "https://secure.gravatar.com/avatar/986630a6219cf58ee49bb67bef1e5adf?s=50",
-  :resource_url
-  "https://api.context.io/2.0/accounts/506a10440d75b44a6e000000/contacts/punitr@gmail.com")
+;; TODO - hard-coding the counts, fix to use actual counts if needed
+(defn prepare-contact [email-address]
+  {:email email-address
+   :count 1100000
+   :name (str (-> email-address (clojure.string/split #"@") first) " von LastName")
+   :received_count 1000000
+   :sent_count 100000
+   :sent_from_accosunt_count 100000
+   :thumbnail "https://secure.gravatar.com/avatar/986630a6219cf58ee49bb67bef1e5adf?s=50",
+   :resource_url (str "https://api.context.io/2.0/accounts/506a10440d75b44a6e000000/contacts/" email-address)})
 
 (defn- prepare-message [m]
   {:subject (:subject m)
@@ -45,7 +45,15 @@
      :name "From Name"},
     :to [{:email (:to m)}]}})
 
+(defn fetch-contacts [account-id]
+  (->> account-id
+       cio/get-messages-for-account
+       (mapcat #(list (:to %) (:from %)))
+       distinct
+       (remove #(= % (:email-address (cio/get-user account-id))))
+       (domap prepare-contact)))
+
 (defn fetch-messages [account-id]
   (->> account-id
        cio/get-messages-for-account
-       (map prepare-message)))
+       (domap prepare-message)))
