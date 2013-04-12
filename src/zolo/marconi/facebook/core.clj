@@ -46,9 +46,9 @@
   (state/remove-from-state! [:FACEBOOK :friends (:id other-user)] (:id main-user)))
 
 (defn fetch-friends [user]
-  (print-vals "Fetching friends for" (:name user))
-  (->> (state/get-from-state [:FACEBOOK :friends (:id user)])
-       (map #(as-friend (state/get-from-state [:FACEBOOK :users %])))))
+  (let [results (->> (state/get-from-state [:FACEBOOK :friends (:id user)])
+                     (map #(as-friend (state/get-from-state [:FACEBOOK :users %]))))]
+    (println "***  Fetching" (count results) "friends for" (:name user))))
 
 (defn send-message [from-user to-user thread-id message yyyy-mm-dd-string]
   (print-vals "Message on" yyyy-mm-dd-string "from" (:name from-user) "to" (:name to-user) ":" message)

@@ -4,7 +4,7 @@
   (:require [zolo.utils.calendar :as zcal]))
 
 (defn new-user [first-name last-name email-address account-id]
-  {:first_name first-name
+  {:first-name first-name
    :last-name last-name
    :email-address email-address
    :account-id account-id})
