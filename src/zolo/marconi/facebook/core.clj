@@ -48,7 +48,8 @@
 (defn fetch-friends [user]
   (let [results (->> (state/get-from-state [:FACEBOOK :friends (:id user)])
                      (map #(as-friend (state/get-from-state [:FACEBOOK :users %]))))]
-    (println "***  Fetching" (count results) "friends for" (:name user))))
+    (println "***  Fetching" (count results) "friends for" (:name user))
+    results))
 
 (defn send-message [from-user to-user thread-id message yyyy-mm-dd-string]
   (print-vals "Message on" yyyy-mm-dd-string "from" (:name from-user) "to" (:name to-user) ":" message)
