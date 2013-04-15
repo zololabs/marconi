@@ -2,7 +2,8 @@
   (:use zolo.marconi.facebook.factory
         zolo.utils.debug
         zolo.utils.clojure)
-  (:require [zolo.marconi.test-state :as state]))
+  (:require [zolo.marconi.test-state :as state]
+            [zolo.utils.calendar :as zcal]))
 
 (defn get-user [id]
   (state/get-from-state [:FACEBOOK :users id]))
@@ -61,9 +62,13 @@
 (defn remove-all-messages [user]
   (state/assoc-in-state! [:FACEBOOK :messages (:id user)] []))
 
-(defn fetch-messages [user]
-  (print-vals "Fetching messages for" (:name user))
-  (state/get-from-state [:FACEBOOK :messages (:id user)]))
+(defn fetch-messages
+  ([user]
+     (fetch-messages user (zcal/to-seconds "1970-01-01")))
+  ([user date-since-seconds]
+     (print-vals "Fetching messages for" (:name user))
+     (->> (state/get-from-state [:FACEBOOK :messages (:id user)])
+          (filter (fn [m] (> (:created_time m) date-since-seconds))))))
 
 (defn post-to-wall [from-user to-user post-message yyyy-mm-dd-string]
   (print-vals "Post on" yyyy-mm-dd-string "from" (:name from-user) "to" (:name to-user) ":" post-message)

@@ -77,10 +77,15 @@
        (remove #(= % (:email-address (cio/get-user account-id))))
        (domap prepare-contact)))
 
-(defn fetch-messages [account-id]
-  (->> account-id
-       cio/get-messages-for-account
-       (domap prepare-message)))
+(defn fetch-messages
+  ([account-id]
+     (fetch-messages account-id (zcal/to-seconds "1970-01-01")))
+  ([account-id date-in-seconds]
+     (let [since (zcal/seconds->instant date-in-seconds)]
+       (->> account-id
+            cio/get-messages-for-account
+            (filter #(> (.compareTo (:date %) since) 0))
+            (domap prepare-message)))))
 
 (defn fetch-account [account-id]
   (->> account-id
