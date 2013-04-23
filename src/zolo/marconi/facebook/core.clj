@@ -1,6 +1,6 @@
 (ns zolo.marconi.facebook.core
   (:use zolo.marconi.facebook.factory
-        zolo.utils.debug
+        zolo.marconi.debug
         zolo.utils.clojure)
   (:require [zolo.marconi.test-state :as state]
             [zolo.utils.calendar :as zcal]))
@@ -9,7 +9,7 @@
   (state/get-from-state [:FACEBOOK :users id]))
 
 (defn login-as [user]
-  (print-vals "Logging in as:" (:name user) "-" (:id user))
+  (print-debug "Logging in as:" (:name user) "-" (:id user))
   (state/assoc-in-state! [:FACEBOOK :current-user] user))
 
 (defn current-user []
@@ -37,23 +37,23 @@
       as-friend))
 
 (defn make-friend [{main-id :id :as main-user} {other-id :id :as other-user}]
-  (print-vals "Making friend:" (:name (get-user main-id)) "<->" (:name (get-user other-id)))
+  (print-debug "Making friend:" (:name (get-user main-id)) "<->" (:name (get-user other-id)))
   (state/append-in-state! [:FACEBOOK :friends (:id main-user)] (:id other-user))
   (state/append-in-state! [:FACEBOOK :friends (:id other-user)] (:id main-user)))
 
 (defn unfriend [{main-id :id :as main-user} {other-id :id :as other-user}]
-  (print-vals "Unfriending :" (:name (get-user main-id)) "<->" (:name (get-user other-id)))
+  (print-debug "Unfriending :" (:name (get-user main-id)) "<->" (:name (get-user other-id)))
   (state/remove-from-state! [:FACEBOOK :friends (:id main-user)] (:id other-user))
   (state/remove-from-state! [:FACEBOOK :friends (:id other-user)] (:id main-user)))
 
 (defn fetch-friends [user]
   (let [results (->> (state/get-from-state [:FACEBOOK :friends (:id user)])
                      (map #(as-friend (state/get-from-state [:FACEBOOK :users %]))))]
-    (println "***  Fetching" (count results) "friends for" (:name user))
+    (print-debug "Fetching" (count results) "friends for" (:name user))
     results))
 
 (defn send-message [from-user to-user thread-id message yyyy-mm-dd-HH-mm-string]
-  (print-vals "Message on" yyyy-mm-dd-HH-mm-string "from" (:name from-user) "to" (:name to-user) ":" message)
+  (print-debug "Message on" yyyy-mm-dd-HH-mm-string "from" (:name from-user) "to" (:name to-user) ":" message)
   (let [msg (new-message from-user to-user thread-id message yyyy-mm-dd-HH-mm-string)]
     (state/append-in-state! [:FACEBOOK :messages (:id from-user)] msg)
     (state/append-in-state! [:FACEBOOK :messages (:id to-user)] msg)
@@ -66,18 +66,18 @@
   ([user]
      (fetch-messages user (zcal/to-seconds "1970-01-01")))
   ([user date-since-seconds]
-     (print-vals "Fetching messages for" (:name user))
+     (print-debug "Fetching messages for" (:name user))
      (->> (state/get-from-state [:FACEBOOK :messages (:id user)])
           (filter (fn [m] (> (:created_time m) date-since-seconds))))))
 
 (defn post-to-wall [from-user to-user post-message yyyy-mm-dd-string]
-  (print-vals "Post on" yyyy-mm-dd-string "from" (:name from-user) "to" (:name to-user) ":" post-message)
+  (print-debug "Post on" yyyy-mm-dd-string "from" (:name from-user) "to" (:name to-user) ":" post-message)
   (let [post (new-post from-user to-user post-message yyyy-mm-dd-string)]
     (state/append-in-state! [:FACEBOOK :posts (:id to-user)] post)
     post))
 
 (defn fetch-feeds [user]
-  (print-vals "Fetching feeds for" (:name user))
+  (print-debug "Fetching feeds for" (:name user))
   (state/get-from-state [:FACEBOOK :posts (:id user)]))
 
 (defn extended-user-info [user]
