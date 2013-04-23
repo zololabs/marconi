@@ -20,9 +20,9 @@
             "Jill" :first_name
             "Sculley" :last_name))
 
-     (fb-lab/send-message jack jill "1" "Hey Jill, I am going to fetch" "2012-05-01")
-     (fb-lab/send-message jill jack "1" "Sure I will come" "2012-05-02")
-     (fb-lab/send-message jack jill "1" "Great see you soon" "2012-05-03")
+     (fb-lab/send-message jack jill "1" "Hey Jill, I am going to fetch" "2012-05-01 00:00")
+     (fb-lab/send-message jill jack "1" "Sure I will come" "2012-05-02 00:00")
+     (fb-lab/send-message jack jill "1" "Great see you soon" "2012-05-03 00:00")
      (is (= 3 (count (fb-lab/fetch-messages jack)))))))
 
 
