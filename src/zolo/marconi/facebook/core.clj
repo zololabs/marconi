@@ -50,9 +50,9 @@
   (->> (state/get-from-state [:FACEBOOK :friends (:id user)])
        (map #(as-friend (state/get-from-state [:FACEBOOK :users %])))))
 
-(defn send-message [from-user to-user thread-id message yyyy-mm-dd-string]
-  (print-vals "Message on" yyyy-mm-dd-string "from" (:name from-user) "to" (:name to-user) ":" message)
-  (let [msg (new-message from-user to-user thread-id message yyyy-mm-dd-string)]
+(defn send-message [from-user to-user thread-id message yyyy-mm-dd-HH-mm-string]
+  (print-vals "Message on" yyyy-mm-dd-HH-mm-string "from" (:name from-user) "to" (:name to-user) ":" message)
+  (let [msg (new-message from-user to-user thread-id message yyyy-mm-dd-HH-mm-string)]
     (state/append-in-state! [:FACEBOOK :messages (:id from-user)] msg)
     (state/append-in-state! [:FACEBOOK :messages (:id to-user)] msg)
     msg))
