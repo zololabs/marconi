@@ -1,4 +1,4 @@
-(ns zolo.marconi.context-io.api
+(ns zolo.marconi.context-io.fake-api
   (:use zolo.utils.debug
         zolo.utils.clojure)
   (:require [zolo.marconi.context-io.core :as cio]
@@ -45,6 +45,30 @@
      :name "From Name"},
     :to [{:email (:to m)}]}})
 
+(defn- prepare-account [{:keys [first-name last-name email-address account-id]}]
+  {:nb_files 10000
+   :last_name last-name
+   :suspended 0
+   :email_addresses [email-address]
+   :password_expired 0
+   :username (str email-address "_" account-id)
+   :created 1349128260
+   :first_name first-name
+   :sources
+   [{:status "OK"
+     :server "imap.googlemail.com"
+     :service_level "pro"
+     :resource_url (str "https://api.context.io/2.0/accounts/" account-id "/sources/" email-address "::imap.googlemail.com")
+     :sync_period "1d"
+     :port 993
+     :username email-address
+     :use_ssl true
+     :type "imap"
+     :authentication_type "oauth"
+     :label (str email-address "::imap.googlemail.com")}]
+   :nb_messages 1000000
+   :id account-id})
+
 (defn fetch-contacts [account-id]
   (->> account-id
        cio/get-messages-for-account
@@ -53,7 +77,17 @@
        (remove #(= % (:email-address (cio/get-user account-id))))
        (domap prepare-contact)))
 
-(defn fetch-messages [account-id]
+(defn fetch-messages
+  ([account-id]
+     (fetch-messages account-id (zcal/to-seconds "1970-01-01")))
+  ([account-id date-in-seconds]
+     (let [since (zcal/seconds->instant date-in-seconds)]
+       (->> account-id
+            cio/get-messages-for-account
+            (filter #(> (.compareTo (:date %) since) 0))
+            (domap prepare-message)))))
+
+(defn fetch-account [account-id]
   (->> account-id
-       cio/get-messages-for-account
-       (domap prepare-message)))
+       cio/get-user
+       prepare-account))
