@@ -47,11 +47,11 @@
 (defn as-friends [users]
   (map as-friend users))
 
-(defn new-message [from-user to-user thread-id message yyyy-mm-dd-string]
+(defn new-message [from-user to-user thread-id message yyyy-mm-dd-HH-mm-string]
   {:attachment []
    :author_id (:id from-user)
    :body  message
-   :created_time (/ (.getTime (date-string->instant "yyyy-MM-dd" yyyy-mm-dd-string)) 1000)
+   :created_time (/ (.getTime (date-string->instant yyyy-mm-dd-HH-mm-string)) 1000)
    :message_id (str (random-integer))
    :thread_id thread-id
    :to [(:id to-user)]})
