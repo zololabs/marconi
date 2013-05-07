@@ -9,9 +9,9 @@
    :email-address email-address
    :account-id account-id})
 
-(defn new-message [yyyy-dd-mm-hh-mm-string from-email to-email subject message files]
+(defn new-message [yyyy-dd-mm-hh-mm-string from-email to-email subject thread-id message files]
   {:id (random-guid-str)
-   :thread-id (random-guid-str)
+   :thread-id thread-id
    :date (zcal/date-string->instant yyyy-dd-mm-hh-mm-string)
    :from from-email
    :to to-email

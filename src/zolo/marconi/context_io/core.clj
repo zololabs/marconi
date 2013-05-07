@@ -29,10 +29,12 @@
 
 (defn send-message
   ([yyyy-dd-mm-hh-mm-string from-email to-email subject message]
-     (send-message yyyy-dd-mm-hh-mm-string from-email to-email subject message []))
-  ([yyyy-dd-mm-hh-mm-string from-email to-email subject message attachment-map-seq]
+     (send-message yyyy-dd-mm-hh-mm-string from-email to-email subject (random-guid-str) message []))
+  ([yyyy-dd-mm-hh-mm-string from-email to-email subject thread-id message]
+     (send-message yyyy-dd-mm-hh-mm-string from-email to-email subject thread-id message []))  
+  ([yyyy-dd-mm-hh-mm-string from-email to-email subject thread-id message attachment-map-seq]
      (let [account-id (-> from-email get-user-by-email :account-id)
-           msg (factory/new-message yyyy-dd-mm-hh-mm-string from-email to-email subject message attachment-map-seq)]
+           msg (factory/new-message yyyy-dd-mm-hh-mm-string from-email to-email subject thread-id message attachment-map-seq)]
        (state/append-in-state! [:CONTEXT-IO :emails (:from msg)] msg)
        (state/append-in-state! [:CONTEXT-IO :emails (:to msg)] msg))))
 
