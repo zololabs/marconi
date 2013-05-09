@@ -18,10 +18,10 @@
 (defn- prepare-message [m]
   {:subject (:subject m)
    :date (zcal/to-seconds (:date m))
-   :gmail_message_id (str "gmail_" (:id m))
+   :gmail_message_id (:id m)
    :folders ["INBOX" "\\Inbox"],
    :date_indexed (+ 1000 (zcal/to-seconds (:date m)))
-   :gmail_thread_id (str "gmail_thread_" (:thread-id m))
+   :gmail_thread_id (:thread-id m)
    :resource_url
    (str "https://api.context.io/2.0/accounts/506a10440d75b44a6e000000/messages/" (:id m))
    :person_info
