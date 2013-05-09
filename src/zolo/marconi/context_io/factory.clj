@@ -7,7 +7,8 @@
   {:first-name first-name
    :last-name last-name
    :email-address email-address
-   :account-id account-id})
+   :account-id account-id
+   :access-token (str (random-guid))})
 
 (defn new-message [yyyy-dd-mm-hh-mm-string from-email to-email subject message files]
   {:id (random-guid-str)
