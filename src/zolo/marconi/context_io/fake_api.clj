@@ -93,8 +93,8 @@
                        (filter #(= message-id-in-thread (:email_message_id %)))
                        first
                        :gmail_thread_id)]
-    (doall (->> messages
-                (filter #(:gmail_thread_id %))))))
+    {:body {:messages (doall (->> messages
+                                  (filter #(= thread-id (:gmail_thread_id %)))))}}))
 
 (defn fetch-account [account-id]
   (->> account-id
