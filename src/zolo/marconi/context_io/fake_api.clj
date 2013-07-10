@@ -87,6 +87,15 @@
             (filter #(> (.compareTo (:date %) since) 0))
             (domap prepare-message)))))
 
+(defn fetch-thread-messages [account-id message-id-in-thread]
+  (let [messages (fetch-messages account-id)
+        thread-id (->> messages
+                       (filter #(= message-id-in-thread (:email_message_id %)))
+                       first
+                       :gmail_thread_id)]
+    (doall (->> messages
+                (filter #(:gmail_thread_id %))))))
+
 (defn fetch-account [account-id]
   (->> account-id
        cio/get-user
