@@ -79,7 +79,7 @@
 
 (defn fetch-messages-from-folder
   ([account-id fetcher-fn date-field]
-     (fetch-messages account-id fetcher-fn date-field (zcal/to-seconds "1970-01-01")))
+     (fetch-messages-from-folder account-id fetcher-fn date-field (zcal/to-seconds "1970-01-01")))
   ([account-id fetcher-fn date-field date-in-seconds]
      (let [since (zcal/seconds->instant date-in-seconds)]
        (->> account-id
