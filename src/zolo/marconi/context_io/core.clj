@@ -14,11 +14,18 @@
         (filter #(= email-address (:email-address %)) it)
         (first it)))
 
-(defn get-messages-for-account [account-id]
+
+(defn get-messages-from-folder-for-account [account-id folder]
   (it-> account-id
         (get-user it)
         (:email-address it)
-        (state/get-from-state [:CONTEXT-IO :emails it])))
+        (state/get-from-state [:CONTEXT-IO :emails folder it])))
+
+(defn get-messages-for-account [account-id]
+  (get-messages-from-folder-for-account account-id :inbox))
+
+(defn get-deleted-messages-for-account [account-id]
+  (get-messages-from-folder-for-account account-id :trash))
 
 (defn create-account
   ([first-name last-name email-address]
@@ -35,7 +42,16 @@
   ([from-email to-email subject thread-id message attachment-map-seq yyyy-dd-mm-hh-mm-string]
      (let [account-id (-> from-email get-user-by-email :account-id)
            msg (factory/new-message yyyy-dd-mm-hh-mm-string from-email to-email subject thread-id message attachment-map-seq)]
-       (state/append-in-state! [:CONTEXT-IO :emails (:from msg)] msg)
-       (state/append-in-state! [:CONTEXT-IO :emails (:to msg)] msg)
+       (state/append-in-state! [:CONTEXT-IO :emails :inbox (:from msg)] msg)
+       (state/append-in-state! [:CONTEXT-IO :emails :inbox (:to msg)] msg)
        msg)))
 
+(defn delete-message [msg]
+  (let [msg (factory/move-to-trash msg)]
+    (state/append-in-state! [:CONTEXT-IO :emails :trash (:from msg)] msg)
+    (state/append-in-state! [:CONTEXT-IO :emails :trash (:to msg)] msg)
+    (state/remove-from-state! [:CONTEXT-IO :emails :inbox (:from msg)] msg)
+    (state/remove-from-state! [:CONTEXT-IO :emails :inbox (:to msg)] msg)))
+
+(defn delete-messages [& msgs]
+  (doeach delete-message msgs))

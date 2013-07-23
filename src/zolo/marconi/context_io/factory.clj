@@ -20,3 +20,5 @@
    :message message
    :files files})
 
+(defn move-to-trash [msg]
+  (assoc msg :deleted-on (zcal/now-instant)))

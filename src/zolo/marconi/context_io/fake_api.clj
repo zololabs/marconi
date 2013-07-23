@@ -77,15 +77,27 @@
        (remove #(= % (:email-address (cio/get-user account-id))))
        (domap prepare-contact)))
 
+(defn fetch-messages-from-folder
+  ([account-id fetcher-fn date-field]
+     (fetch-messages account-id fetcher-fn date-field (zcal/to-seconds "1970-01-01")))
+  ([account-id fetcher-fn date-field date-in-seconds]
+     (let [since (zcal/seconds->instant date-in-seconds)]
+       (->> account-id
+            fetcher-fn
+            (filter #(> (.compareTo (% date-field) since) 0))
+            (domap prepare-message)))))
+
 (defn fetch-messages
   ([account-id]
      (fetch-messages account-id (zcal/to-seconds "1970-01-01")))
   ([account-id date-in-seconds]
-     (let [since (zcal/seconds->instant date-in-seconds)]
-       (->> account-id
-            cio/get-messages-for-account
-            (filter #(> (.compareTo (:date %) since) 0))
-            (domap prepare-message)))))
+     (fetch-messages-from-folder account-id cio/get-messages-for-account :date date-in-seconds)))
+
+(defn fetch-deleted-messages
+  ([account-id]
+     (fetch-deleted-messages account-id (zcal/to-seconds "1970-01-01")))
+  ([account-id date-in-seconds]
+     (fetch-messages-from-folder account-id cio/get-deleted-messages-for-account :deleted-on date-in-seconds)))
 
 (defn fetch-thread-messages [account-id message-id-in-thread]
   (let [messages (fetch-messages account-id)
